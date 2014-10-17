@@ -16,5 +16,5 @@ easybuilder
 - to build postgres 93 container in repo easybuild_postgres93 version 0.1<BR>
 <code>docker build -t easybuilder_postgres93:0.1 ./dockerFiles/postgres93/</code>
 
-- to build postgres 93 container in repo easybuild_postgres93 version 0.1<BR>
+- to run postgres 93 container in repo easybuild_postgres93 version 0.1<BR>
 <code>docker run -i -t easybuilder_postgres93:0.1</code>
