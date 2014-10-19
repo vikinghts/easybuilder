@@ -19,10 +19,14 @@ easybuilder
 - to run postgres 93 container in repo easybuild_postgres93 version 0.1<BR>
 <code>docker run -i -t easybuilder_postgres93:0.1</code>
 
-- to build jenkins container in repo easybuild_jenkins version 0.1<BR>
+- to build and run jenkins container in repo easybuild_jenkins version 0.1<BR>
 <code>docker build -t easybuilder_jenkins:0.1 ./dockerFiles/jenkins/</code>
-
-- to run jenkins 93 container in repo easybuild_jenkins version 0.1<BR>
 <code>docker run -i -t easybuilder_jenkins:0.1</code>
 with exposed port
 <code>docker run -p 0.0.0.0:7676:8080 -i --name jenkins -t  easybuilder_jenkins:0.1</code>
+
+- to build and run sonar container in repo easybuild_sonar version 0.1<BR>
+<code>docker build -t easybuilder_sonar:0.1 ./dockerFiles/sonar/</code>
+<code>docker run -i -t easybuilder_sonar:0.1</code>
+with exposed port
+<code>docker run -p 0.0.0.0:7676:9000 -i --name sonar -t  easybuilder_sonar:0.1</code>
