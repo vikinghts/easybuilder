@@ -1,6 +1,7 @@
 from ubuntu:14.04
 MAINTAINER kjansen
 run echo "install jenkins"
+run ping -c 1 www.google.com
 run sudo apt-get update
 run sudo apt-get -y install wget
 run wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -

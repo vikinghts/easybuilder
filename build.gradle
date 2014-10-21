@@ -1,33 +1,60 @@
-task create_jenkins(type:Exec) {
-  workingDir 'dockerFiles/jenkins/'
-  //commandLine '/usr/local/bin/docker','build','-t','easybuilder_jenkins:0.1','dockerFiles/jenkins'
-  commandLine '/usr/local/bin/docker','build','-t','easybuilder_jenkins:0.1','.'
+defaultTasks 'createImages'
+
+task createImages(dependsOn: ['buildJenkins','buildSonar']){
+
 }
 
-task checkInternet(){
-	doLast {
-		if (checkInternetConnection()) {
-                        System.out.println("true");
-		} else {
-                        System.out.println("false");
-			throw new GradleException('no internet connection')
-		}
-	}
+
+task buildJenkins(type: Exec) {
+    workingDir 'dockerFiles/jenkins/'
+    commandLine '/usr/local/bin/docker', 'build', '-t', 'easybuilder_jenkins:0.1', '.'
 }
 
-def checkInternetConnection(){
-	int timeout=1500;
-	try {
-		if (InetAddress.getByName('www.google.com').isReachable(timeout)){
-			System.out.println("Host: ");
-			return true;
-		}else{
-			System.out.println("no Host: ");
-			return false;
-		}
-	} catch (Exception e) {
-		System.out.println("Unknown Host: "+e);
-	}
-	return false;
+task buildSonar(type: Exec) {
+    workingDir 'dockerFiles/sonar/'
+    commandLine '/usr/local/bin/docker', 'build', '-t', 'easybuilder_sonar:0.1', '.'
 }
+
+
+task checkInternet() {
+    doLast {
+        if (checkInternetConnection()) {
+            System.out.println("true");
+        } else {
+            System.out.println("false");
+            //throw new GradleException('no internet connection might be proxy settings')
+        }
+        if (checkInternetConnectionProxy()) {
+            System.out.println("true proxy");
+        } else {
+            System.out.println("false proxy");
+            throw new GradleException('proxy no internet connection might be proxy settings')
+        }
+    }
+}
+
+
+
+def checkInternetConnection() {
+    int timeout = 1500;
+    try {
+        return InetAddress.getByName("www.nl.cx").isReachable(timeout)
+    } catch (Exception e) {
+        System.out.println("Unknown Host: " + e);
+    }
+    return false;
+}
+
+def checkInternetConnectionProxy() {
+    int timeout = 1500;
+    try {
+        System.setProperty("https.proxyHost", "10.12.9.101");
+        System.setProperty("https.proxyPort", "8080");
+        return InetAddress.getByName("www.nl.cx").isReachable(timeout)
+    } catch (Exception e) {
+        System.out.println("Unknown Host: " + e);
+    }
+    return false;
+}
+
 
