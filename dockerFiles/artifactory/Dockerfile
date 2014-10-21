@@ -1,6 +1,8 @@
 from ubuntu:14.04
 MAINTAINER kjansen
 run echo "install artifactory"
+run ping -c 1 www.google.com
+run echo "Network is oke"
 run sudo apt-get update
 run sudo apt-get install -y wget 
 run sudo apt-get install -y unzip 
