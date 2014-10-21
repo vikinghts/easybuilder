@@ -1,4 +1,4 @@
-defaultTasks 'createImages'
+defaultTasks 'buildImages'
 
 task buildImages(dependsOn: ['buildJenkins','buildSonar']){
 }
