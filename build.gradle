@@ -5,12 +5,12 @@ task buildImages(dependsOn: ['buildJenkins','buildSonar']){
 
 task buildJenkins(type: Exec) {
     workingDir 'dockerFiles/jenkins/'
-    commandLine '/usr/local/bin/docker', 'build', '-t', 'easybuilder_jenkins:0.1', '.'
+    commandLine 'docker', 'build', '-t', 'easybuilder_jenkins:0.1', '.'
 }
 
 task buildSonar(type: Exec) {
     workingDir 'dockerFiles/sonar/'
-    commandLine '/usr/local/bin/docker', 'build', '-t', 'easybuilder_sonar:0.1', '.'
+    commandLine 'docker', 'build', '-t', 'easybuilder_sonar:0.1', '.'
 }
 
 /*
@@ -23,28 +23,28 @@ task runImages(dependsOn: ['runSonar','runJenkins']) {
 }
 
 task runSonar(type: Exec) {
-    commandLine '/usr/local/bin/docker', 'run', '-p', '19000:9000', '-p', '15432:5432', '--name', 'sonar01',  '-i', '-t', 'easybuilder_sonar:0.1'
+    commandLine 'docker', 'run', '-p', '19000:9000', '-p', '15432:5432', '--name', 'sonar01',  '-i', '-t', 'easybuilder_sonar:0.1'
 }
 
 task runJenkins(type: Exec) {
-    commandLine '/usr/local/bin/docker', 'run',  '-p', '18080:8080', '--name', 'jenkins01',  '-i', '-t', 'easybuilder_jenkins:0.1'
+    commandLine 'docker', 'run',  '-p', '18080:8080', '--name', 'jenkins01',  '-i', '-t', 'easybuilder_jenkins:0.1'
 }
 
 task stopRemoveImages(dependsOn: ['removeSonar','removeJenkins']) {
 }
 
 task stopSonar(type: Exec) {
-    commandLine '/usr/local/bin/docker', 'stop', 'sonar01'
+    commandLine 'docker', 'stop', 'sonar01'
 }
 task removeSonar(type: Exec,dependsOn: 'stopSonar') {
-    commandLine '/usr/local/bin/docker', 'rm', 'sonar01'
+    commandLine 'docker', 'rm', 'sonar01'
 }
 
 task stopJenkins(type: Exec) {
-    commandLine '/usr/local/bin/docker', 'stop', 'jenkins01'
+    commandLine 'docker', 'stop', 'jenkins01'
 }
 task removeJenkins(type: Exec,dependsOn: 'stopJenkins') {
-    commandLine '/usr/local/bin/docker', 'rm', 'jenkins01'
+    commandLine 'docker', 'rm', 'jenkins01'
 }
 
 
