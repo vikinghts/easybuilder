@@ -1,0 +1,33 @@
+task create_jenkins(type:Exec) {
+  workingDir 'dockerFiles/jenkins/'
+  //commandLine '/usr/local/bin/docker','build','-t','easybuilder_jenkins:0.1','dockerFiles/jenkins'
+  commandLine '/usr/local/bin/docker','build','-t','easybuilder_jenkins:0.1','.'
+}
+
+task checkInternet(){
+	doLast {
+		if (checkInternetConnection()) {
+                        System.out.println("true");
+		} else {
+                        System.out.println("false");
+			throw new GradleException('no internet connection')
+		}
+	}
+}
+
+def checkInternetConnection(){
+	int timeout=1500;
+	try {
+		if (InetAddress.getByName('www.google.com').isReachable(timeout)){
+			System.out.println("Host: ");
+			return true;
+		}else{
+			System.out.println("no Host: ");
+			return false;
+		}
+	} catch (Exception e) {
+		System.out.println("Unknown Host: "+e);
+	}
+	return false;
+}
+
