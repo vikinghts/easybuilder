@@ -3,12 +3,18 @@ MAINTAINER kjansen
 run echo "install jenkins"
 run ping -c 1 www.google.com
 run echo "Network is oke"
-run sudo apt-get update
-run sudo apt-get -y install wget
-run wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-run sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-run sudo apt-get update
-run sudo apt-get -y install jenkins
-CMD su -l jenkins --shell=/bin/bash -c "export JENKINS_HOME=/var/lib/jenkins;java -jar /usr/share/jenkins/jenkins.war" 
-EXPOSE 8080
+VOLUME /jenkins
+RUN sudo apt-get -q -y install software-properties-common
+RUN sudo add-apt-repository ppa:openjdk-r/ppa
+RUN apt-get update && apt-get clean
+RUN apt-get install -q -y openjdk-8-jdk
+#RUN apt-get install -q -y openjdk-7-jre-headless && apt-get clean
+RUN apt-get install -q -y git-core && apt-get clean
+RUN apt-get install -q -y ant && apt-get clean
+ADD http://mirrors.jenkins-ci.org/war/1.614/jenkins.war /opt/jenkins.war
+RUN chmod 644 /opt/jenkins.war
+ENV JENKINS_HOME /jenkins
 
+ENTRYPOINT ["java", "-jar", "/opt/jenkins.war"]
+EXPOSE 8080
+CMD [""]

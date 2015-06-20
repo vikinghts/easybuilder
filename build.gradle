@@ -1,5 +1,20 @@
 defaultTasks 'buildImages'
 
+
+//to print commandline for easy debuging
+allprojects {
+  tasks.withType(Exec) {
+    doFirst {
+	String cmdPrint = commandLine
+	println 'Command to run:' + cmdPrint.replace(',','')
+    }
+  }
+}
+
+task createBuildDir(){
+	buildDir.mkdirs()
+}
+
 task buildImages(dependsOn: ['buildJenkins','buildSonar']){
 }
 
@@ -22,12 +37,13 @@ task runImages(type: Exec) {
 task runImages(dependsOn: ['runSonar','runJenkins']) {
 }
 
-task runSonar(type: Exec) {
-    commandLine 'docker', 'run', '-p', '19000:9000', '-p', '15432:5432', '--name', 'sonar01',  '-i', '-t', 'easybuilder_sonar:0.1'
+task runSonar(type: Exec,dependsOn: ['buildSonar','createBuildDir'],) {
+    commandLine 'docker', 'run', '-p', '19000:9000', '-p', '15432:5432', '--name', 'sonar01', '-t', 'easybuilder_sonar:0.1'
 }
 
-task runJenkins(type: Exec) {
-    commandLine 'docker', 'run',  '-p', '18080:8080', '--name', 'jenkins01',  '-i', '-t', 'easybuilder_jenkins:0.1'
+task runJenkins(type: Exec,dependsOn: ['buildJenkins','createBuildDir']) {
+    //commandLine 'docker', 'run',  '-p', '18080:8080', '--name', 'jenkins09', '-v' , "${buildDir}/jenkins_home:/var/lib/jenkins" ,'-t', 'easybuilder_jenkins:0.1'
+    commandLine 'docker', 'run',  '-p', '18080:8080', '--name', 'jenkins01', '-v' , "${buildDir}/jenkins_home:/jenkins" ,'-t', 'easybuilder_jenkins:0.1'
 }
 
 task stopRemoveImages(dependsOn: ['removeSonar','removeJenkins']) {

@@ -1,0 +1,15 @@
+from ubuntu:14.04
+MAINTAINER kjansen
+run echo "install jenkins"
+run ping -c 1 www.google.com
+run echo "Network is oke"
+VOLUME /var/lib/jenkins
+run sudo apt-get update
+run sudo apt-get -y install wget
+run wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+run sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+run sudo apt-get update
+run sudo apt-get -y install jenkins
+CMD su -l jenkins --shell=/bin/bash -c "export JENKINS_HOME=/var/lib/jenkins;java -jar /usr/share/jenkins/jenkins.war" 
+EXPOSE 8080
+
