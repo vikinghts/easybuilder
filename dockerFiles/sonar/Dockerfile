@@ -14,7 +14,7 @@ RUN    /etc/init.d/postgresql start &&\
     psql --command "CREATE USER sonarrunner WITH SUPERUSER PASSWORD 'pp4kris';" &&\
     createdb -O sonarrunner sonar
 USER root
-RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.confdocker
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
 RUN echo "sonar.jdbc.username=sonarrunner " >>  /opt/sonar/conf/sonar.properties
